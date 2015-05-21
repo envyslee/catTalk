@@ -13,23 +13,51 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="False"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    Loaded="PhoneApplicationPage_Loaded">
 
     <phone:PhoneApplicationPage.Resources>
+        <Storyboard x:Name="OpenTitleStoryboard">
+            <DoubleAnimation
+                            Storyboard.TargetName="TitleProjection"
+                            Storyboard.TargetProperty="RotationX"
+                            From="-50"
+                            To="0"
+                            Duration="0:0:0.2"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopPopGrid"
+                                           Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0"
+                                        Value="Visible"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="CloseTitleStoryboard">
+            <DoubleAnimation
+                            Storyboard.TargetName="TitleProjection"
+                            Storyboard.TargetProperty="RotationX"
+                            To="90"
+                            Duration="0:0:0.2"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopPopGrid"
+                                           Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:.2"
+                                        Value="Collapsed"/>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+        
         <DataTemplate x:Key="contentTemplate">
             <local:TemplateSelector Content="{Binding}">
 
                 <local:TemplateSelector.ReceiveTemplate>
                     <DataTemplate>
-                        <Grid    Margin="0 4"
+                        <Grid  Margin="0 0 0 6"
                                Width="{Binding ElementName=ContentPanel,Path=ActualWidth}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                <ColumnDefinition Width="64"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Image Source="img/cat.png" VerticalAlignment="Top"></Image>
                             <Grid HorizontalAlignment="Left" Grid.Column="1" Background="Aquamarine">
-                                <TextBlock Padding="8 0 32 0" Text="{Binding Word}"  FontSize="28" Foreground="Black" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="{Binding Word}" Padding="6 6 32 0"  FontSize="24" Foreground="Black" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
                             </Grid>
                    
                         </Grid>
@@ -45,27 +73,17 @@
                               HorizontalAlignment="Right">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="70"></ColumnDefinition>
+                                <ColumnDefinition Width="64"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid Background="Gold" HorizontalAlignment="Right">
-                                <TextBlock Padding="16 0 8 0"  Text="{Binding Word}" Foreground="Black" TextWrapping="Wrap" FontSize="28" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Padding="16 0 8 0"  Text="{Binding Word}" Foreground="Black" TextWrapping="Wrap" FontSize="24" VerticalAlignment="Center"></TextBlock>
                             </Grid>
                             <Image Source="img/man.jpg" Grid.Column="1" ></Image>
-                     
                         </Grid>
-                      
-
                     </DataTemplate>
                 </local:TemplateSelector.SendTemplate>
-
-
-
             </local:TemplateSelector>
-
         </DataTemplate>
-
-
-
     </phone:PhoneApplicationPage.Resources>
 
 
@@ -94,7 +112,7 @@
                                         BorderBrush="Gray" 
                                         Height="1"
                                         Width="{Binding ElementName=ContentPanel,Path=ActualWidth}"></Border>
-        <Grid Grid.Row="2" Margin="12,0,12,0">
+        <Grid x:Name="llscontent" Grid.Row="2" Margin="12,0,12,0">
             <phone:LongListSelector ItemTemplate="{StaticResource contentTemplate}"
                                         ItemsSource="{Binding Datalist}"
                                         >
@@ -129,6 +147,69 @@
             </Grid.ColumnDefinitions>
             <TextBox x:Name="sendTxt"  Grid.Column="0" BorderBrush="Gray"></TextBox>
             <Button Width="100" Grid.Column="1" Click="Button_Click" Foreground="Black" BorderBrush="Gray">发送</Button>
+        </Grid>
+        <Grid Background="Black"
+              Grid.RowSpan="4"
+              Opacity="0.8"
+              Height="170"
+              x:Name="TopPopGrid"
+              VerticalAlignment="Bottom"
+              Canvas.ZIndex="10"
+              Visibility="Collapsed">
+            <Grid.Projection>
+                <PlaneProjection x:Name="TitleProjection"/>
+            </Grid.Projection>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.ColumnSpan="2"
+                       Margin="12 20 12 0"
+                       Text="亲，用的还愉快吗？去商店给个好评吧，您的支持是我前进的动力~"
+                       TextWrapping="Wrap"
+                       FontSize="24"></TextBlock>
+            <Grid  Grid.Row="1"
+                           Grid.Column="0"
+                   Margin="0 -20 0 0">
+                <Ellipse
+                       Height="40"
+                           Width="40"
+                     StrokeThickness="2"
+                     Stroke="White"></Ellipse>
+                <Border 
+                           Height="40"
+                           Width="40"
+                    BorderThickness="0"
+                    Tap="Border_Tap">
+                    <Border.Background>
+                        <ImageBrush ImageSource="/img/check.png"></ImageBrush>
+                    </Border.Background>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="1"
+                           Grid.Column="1"
+                  Margin="0 -20 0 0">
+                <Ellipse 
+                           Height="40"
+                           Width="40"
+                     StrokeThickness="2"
+                     Stroke="White"></Ellipse>
+                <Border 
+                            Height="40"
+                           Width="40"
+                    Tap="Border_Tap_1">
+                    <Border.Background>
+                        <ImageBrush ImageSource="/img/cancel.png"></ImageBrush>
+                    </Border.Background>
+                </Border>
+            </Grid>
+
         </Grid>
     </Grid>
 

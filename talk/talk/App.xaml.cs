@@ -7,11 +7,15 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using talk.Resources;
+using talk.Common;
+using System.IO.IsolatedStorage;
 
 namespace talk
 {
     public partial class App : Application
     {
+        private IsolatedStorageSettings settings = IsolatedStorageSettings.ApplicationSettings;
+        private string umengkey = "555d7b0f67e58ed9e7000510";
         /// <summary>
         ///提供对电话应用程序的根框架的轻松访问。
         /// </summary>
@@ -31,6 +35,8 @@ namespace talk
 
             // 特定于电话的初始化
             InitializePhoneApplication();
+
+            UmengSDK.UmengAnalytics.Init(umengkey);
 
             // 语言显示初始化
             InitializeLanguage();
@@ -61,6 +67,18 @@ namespace talk
         // 此代码在重新激活应用程序时不执行
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            if (!settings.Contains("reviewTag"))
+            {
+                settings.Add("reviewTag", DateTime.Now.AddDays(5));
+                settings.Save();
+            }
+            else
+            {
+                if (DateTime.Now > (DateTime)settings["reviewTag"])
+                {
+                    CommPara.pastFive = true;
+                }
+            }
         }
 
         // 激活应用程序(置于前台)时执行的代码

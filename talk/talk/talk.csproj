@@ -159,7 +159,9 @@
     <Content Include="cat.png" />
     <Content Include="cat159.png" />
     <Content Include="cat336.png" />
+    <Content Include="img\cancel.png" />
     <Content Include="img\cat.png" />
+    <Content Include="img\check.png" />
     <Content Include="img\man.jpg" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
@@ -172,6 +174,10 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UmengAnalyticsWP8, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UmengAnalytics.2.0.2\lib\wp8\UmengAnalyticsWP8.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

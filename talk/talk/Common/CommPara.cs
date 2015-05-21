@@ -9,5 +9,7 @@ namespace talk.Common
    public static class CommPara
     {
        public static string url;
+
+       public static bool pastFive=false;
     }
 }
